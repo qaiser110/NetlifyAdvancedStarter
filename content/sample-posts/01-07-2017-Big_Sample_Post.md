@@ -1,8 +1,11 @@
 ---
+templateKey: blog-post
+path: big-test
 title: "Big Test"
+date: 2016-12-17T15:04:10.000Z
+description: The Coffee Taster’s Flavor Wheel, the official resource used by coffee tasters, has been revised for the first time this year.
 cover: "https://unsplash.it/400/300/?random?BigTest"
 category: "moar"
-date: "01/03/2018"
 slug: "Big-Sample_Test"
 tags:
     - test
