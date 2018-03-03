@@ -2,6 +2,7 @@
 /* eslint import/extensions:"off" */
 /* eslint global-require:"off" */
 import React from "react";
+import Script from "react-load-script";
 import favicon from "./favicon.png";
 
 let inlinedStyles = "";
@@ -16,6 +17,19 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export default class HTML extends React.Component {
+  handleScriptLoad() {
+    if (typeof window !== `undefined` && window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+    window.netlifyIdentity.init();
+  }
+
   render() {
     let css;
     if (process.env.NODE_ENV === "production") {
@@ -36,7 +50,10 @@ export default class HTML extends React.Component {
           />
           {this.props.headComponents}
           <link rel="shortcut icon" href={favicon} />
-          <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+          <Script
+            url="https://identity.netlify.com/v1/netlify-identity-widget.js"
+            onLoad={() => this.handleScriptLoad()}
+          />
           {css}
         </head>
         <body>
@@ -45,17 +62,6 @@ export default class HTML extends React.Component {
             dangerouslySetInnerHTML={{ __html: this.props.body }}
           />
           {this.props.postBodyComponents}
-          <script>
-            if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-              if (!user) {
-                window.netlifyIdentity.on("login", () => {
-                  document.location.href = "/admin/";
-                });
-              }
-            });
-          }
-          </script>
         </body>
       </html>
     );
